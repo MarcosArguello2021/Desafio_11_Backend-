@@ -1,7 +1,5 @@
-import { Schema } from "mongoose";
-
 let arrayDB = ['txt','firebase','mongo'];
-let cambiarBase = arrayDB[0]; //para probar cambiar el indice del arrayDB por : 0, 1, 3;
+let cambiarBase = arrayDB[2]; //para probar cambiar el indice del arrayDB por : 0, 1, 3;
 
 let chatDao;
 
@@ -15,48 +13,12 @@ switch (cambiarBase) {
         chatDao = new ContenedorFirebase('chat');
         break;
     case 'mongo':
-        const ContenedorMongoDb = await import('../containers/ContenedorMongoDb.js');
-        chatDao = new ContenedorMongoDb('chat', chatSchema);
+        const { default: ChatDaoMongo } = await import('./ChatDaoMongo.js')
+        chatDao = new ChatDaoMongo();
         break;
     default:
         // do nothing;           
         break
 }
-
-const chatSchema = Schema({
-    author: {
-        id: {
-            type: String,
-            required: true
-        },
-        nombre: {
-            type: String,
-            required: true
-        },
-        apellido: {
-            type: String,
-            required: true
-        },
-        edad: {
-            type: String,
-            required: true
-        },
-        alias: {
-            type: String,
-            required: true
-        },
-        avatar: {
-            type: String,
-            required: true
-        }
-    },
-    text: {
-        type: String,
-        required: true
-    }
-}, {
-    timestamps: false,
-    versionKey: false
-})
 
 export default chatDao;

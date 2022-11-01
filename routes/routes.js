@@ -1,36 +1,20 @@
-
 import { Router } from "express";
-const chatProducto = Router();
+const router = Router();
 import { productosRandom } from '../utils/faker.js';
-
-chatProducto.get('/login', (req, res) => {
-    let usuario = req.session.userName;
-    if(usuario){
-        res.redirect('/')  
-    }
-    else{ 
-        res.render('login', {usuario})
-    }
-})
-
-chatProducto.post('/login', (req, res) => {
-    req.session.userName = req.body.nombre;
-    res.redirect('/')
-})
-
-chatProducto.get('/logout', (req, res) => {
-    let infoUser = req.session.userName;
-    req.session.destroy(err => {
-        if (err) {
-            res.send(err);
-        }
-    })
-    res.render('logout', {infoUser});
-})
+import { logout, signin, signup, auth } from '../controllers/userController.js'
 
 
+router.get('/login', (req, res) => res.render('login'))
+router.post('/login', signin);
+router.get('/logout', logout);
 
-chatProducto.get('/productos-test', async (req, res) => {
+router.get('/registro', (req, res) => res.render('register'))
+router.post('/registro', signup)
+
+router.get('/error-login', (req, res) => res.render('faillogin'))
+router.get('/error-registro', (req, res) => res.render('failregister'))
+
+router.get('/productos-test', auth ,async (req, res) => {
     try {
         const productosFaker = productosRandom();
         res.json(productosFaker);
@@ -39,4 +23,4 @@ chatProducto.get('/productos-test', async (req, res) => {
     }
 });
 
-export default chatProducto;
+export default router;

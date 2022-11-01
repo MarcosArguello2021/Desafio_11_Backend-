@@ -13,6 +13,7 @@ export default async (io) => {
 
     socket.on('cliente_nuevo_mensaje_chat', async data => {
       await chatDao.save(data)
+      let chat = await chatDao.getAll();
       io.sockets.emit('lista_chat', chat)
     })
   })

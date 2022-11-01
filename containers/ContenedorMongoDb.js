@@ -1,6 +1,8 @@
 import mongoose from 'mongoose'
 import config from '../config.js'
+import { asPOJO, renameField, removeField } from '../utils/objectUtils.js'
 
+await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
 class ContenedorMongoDb {
 
     constructor(nombreColeccion, esquema) {
@@ -8,8 +10,8 @@ class ContenedorMongoDb {
     }
 
     async getAll(){
-        await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
         try{
+            await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
             const respuesta = await this.coleccion.find().sort({id: 1})
             mongoose.connection.close()
             return respuesta
@@ -20,8 +22,8 @@ class ContenedorMongoDb {
 
     async getById(req, res){
         const id = parseInt(req.params.id);
-        await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
         try{
+            await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
             const respuesta = await this.coleccion.find({id:{$eq: `${id}`}})
             console.log(respuesta)
             mongoose.connection.close()
@@ -37,7 +39,11 @@ class ContenedorMongoDb {
 
     async save(newObj){
         try {
+            await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
             let doc = await this.coleccion.create(newObj);
+            doc = asPOJO(doc)
+            renameField(doc, '_id', 'id')
+            removeField(doc, '__v')
             return doc
         } catch (error) {
             throw new Error(`Error al guardar: ${error}`)
@@ -45,8 +51,8 @@ class ContenedorMongoDb {
     }
 
     async putById(x,newObj){
-        await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
         try{
+            await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
             await this.coleccion.replaceOne({id:{$eq: `${x}`}} ,newObj)
             mongoose.connection.close()
         }catch(error){
@@ -56,8 +62,8 @@ class ContenedorMongoDb {
 
     async deleteById(req, res){
         const id = parseInt(req.params.id);
-        await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
         try{
+            await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
             await this.coleccion.deleteOne({id:{$eq: `${id}`}})
             mongoose.connection.close()
         }catch(error){
@@ -66,8 +72,8 @@ class ContenedorMongoDb {
     }
 
     async deleteAll(){
-        await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
         try{
+            await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
             await this.coleccion.deleteMany({})
             mongoose.connection.close()
         }catch(error){

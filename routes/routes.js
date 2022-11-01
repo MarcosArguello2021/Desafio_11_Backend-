@@ -7,7 +7,6 @@ import { logout, signin, signup, auth } from '../controllers/userController.js'
 router.get('/login', (req, res) => res.render('login'))
 router.post('/login', signin);
 router.get('/logout', logout);
-
 router.get('/registro', (req, res) => res.render('register'))
 router.post('/registro', signup)
 

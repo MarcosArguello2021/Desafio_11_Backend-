@@ -1,6 +1,9 @@
 import {User} from "../models/user.js"
-import passport from 'passport'
-import '../utils/passport.js'
+import passport from '../utils/passport.js'
+import mongoose from 'mongoose'
+import config from '../config.js'
+
+await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
 
 export const signup = async (req, res) => {
     const { email, password } = req.body
@@ -19,8 +22,8 @@ export const signin = passport.authenticate('local', {
     failureRedirect: "/api/error-login",
 })
 
-export const logout = async (req, res, next) => {
-    let idSession = await req.session.passport.user
+export const logout = async (req, res, next)=> {
+    let idSession = req.session.passport.user
     let userInfo = await User.findOne({ '_id': idSession })
     let infoUser = userInfo.email
     await req.logout((err) => {
@@ -28,7 +31,6 @@ export const logout = async (req, res, next) => {
         return res.render("logout", { infoUser })
     })
 }
-
 export const auth = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next();

@@ -2,8 +2,6 @@ import passport from "passport"
 import { Strategy as LocalStrategy } from "passport-local"
 import { User } from "../models/user.js"
 
-
-
 passport.use(new LocalStrategy({
         usernameField: "email",
     },
@@ -19,7 +17,6 @@ passport.use(new LocalStrategy({
         return done(null, user)
     }
 ))
-
 
 passport.serializeUser((user, done) => {
     done(null, user.id)

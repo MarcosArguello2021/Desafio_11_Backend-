@@ -13,7 +13,6 @@ class ContenedorMongoDb {
         try{
             await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
             const respuesta = await this.coleccion.find().sort({id: 1})
-            mongoose.connection.close()
             return respuesta
         }catch(err){
             return []     
@@ -26,7 +25,6 @@ class ContenedorMongoDb {
             await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
             const respuesta = await this.coleccion.find({id:{$eq: `${id}`}})
             console.log(respuesta)
-            mongoose.connection.close()
             if(respuesta.length === 0) {
                 throw new Error(`No se ecuentra el ID: ${err}`)
             }else {
@@ -75,7 +73,6 @@ class ContenedorMongoDb {
         try{
             await mongoose.connect(config.mongodb.cnxStr, config.mongodb.options)
             await this.coleccion.deleteMany({})
-            mongoose.connection.close()
         }catch(error){
             throw new Error(`Error leer el ID de archivo: ${error}`)
         }

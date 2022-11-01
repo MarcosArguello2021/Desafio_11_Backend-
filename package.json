@@ -24,7 +24,7 @@
     "node-fetch": "2.6.1",
     "normalizr": "^3.6.2",
     "firebase-admin": "^11.0.1",
-    "mongoose": "^6.6.3",
+    "mongoose": "^6.6.6",
     "socket.io": "^4.5.1",
     "express-session": "^1.17.3",
     "connect-mongo": "^4.6.0",

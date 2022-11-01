@@ -5,7 +5,8 @@ import { Server as IOServer } from 'socket.io'
 import socket from './utils/socket.js'
 import { engine } from 'express-handlebars';
 import session from './utils/session.js'
-import passport from 'passport'
+
+import passport from './utils/passport.js'
 import {User} from "./models/user.js"
 import { auth } from './controllers/userController.js'
 
